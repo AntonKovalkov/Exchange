@@ -16,6 +16,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-Xs-g6K">
+                                <rect key="frame" x="188.5" y="437.5" width="37" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cS0-HB-HZz">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -62,12 +68,15 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="cS0-HB-HZz" firstAttribute="top" secondItem="NLX-t3-dhN" secondAttribute="top" id="DMY-w1-LyD"/>
+                            <constraint firstItem="y8D-Xs-g6K" firstAttribute="centerX" secondItem="lbw-4y-dqQ" secondAttribute="centerX" id="ZNA-Rt-oV4"/>
                             <constraint firstItem="NLX-t3-dhN" firstAttribute="bottom" secondItem="cS0-HB-HZz" secondAttribute="bottom" id="avM-fq-pi8"/>
                             <constraint firstItem="NLX-t3-dhN" firstAttribute="trailing" secondItem="cS0-HB-HZz" secondAttribute="trailing" id="dl8-IW-25x"/>
                             <constraint firstItem="cS0-HB-HZz" firstAttribute="leading" secondItem="NLX-t3-dhN" secondAttribute="leading" id="rwC-nj-wJ8"/>
+                            <constraint firstItem="y8D-Xs-g6K" firstAttribute="centerY" secondItem="lbw-4y-dqQ" secondAttribute="centerY" id="xkI-Iy-Z9u"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="errorLabel" destination="y8D-Xs-g6K" id="KYR-4k-QQo"/>
                         <outlet property="tableView" destination="cS0-HB-HZz" id="76k-yF-KdD"/>
                     </connections>
                 </viewController>

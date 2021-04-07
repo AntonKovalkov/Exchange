@@ -8,6 +8,7 @@
 import UIKit
 
 class ExchangeViewController: UIViewController {
+    @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     private var currencyData: Currency? {
@@ -28,7 +29,8 @@ class ExchangeViewController: UIViewController {
         tableView.delegate = self
         tableViewConfig()
 
-        ServerRequest.getData { [self] (data) in
+        ServerRequest.getData { [self] (data, error ) in
+            guard error == nil else {showError(error: error!); return }
             self.currencyData = data
         }
     }
@@ -38,6 +40,14 @@ class ExchangeViewController: UIViewController {
         let nib = UINib(nibName: headerID, bundle: nil)
         tableView.register(nib, forHeaderFooterViewReuseIdentifier: headerID)
         tableView.sectionHeaderHeight = 80
+    }
+    
+    private func showError(error: NetworkError) {
+        DispatchQueue.main.async {
+            self.tableView.isHidden = true
+            self.errorLabel.text = error.rawValue
+        }
+        
     }
     
 }
@@ -81,7 +91,8 @@ extension ExchangeViewController: UITableViewDelegate {
         guard let base = currencyData?.currencyArray[indexPath.row].first?.key else { return }
         tableView.deselectRow(at: indexPath, animated: true)
         
-        ServerRequest.getData(base: base) { (data) in
+        ServerRequest.getData(base: base) { (data, error) in
+            guard error == nil else {self.showError(error: error!); return }
             self.currencyData = data
         }
     }
