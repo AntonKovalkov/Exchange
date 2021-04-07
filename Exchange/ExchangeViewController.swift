@@ -29,9 +29,9 @@ class ExchangeViewController: UIViewController {
         tableView.delegate = self
         tableViewConfig()
 
-        ServerRequest.getData { [self] (data, error ) in
-            guard error == nil else {showError(error: error!); return }
-            self.currencyData = data
+        ServerRequest.getData { [weak self] (data, error ) in
+            guard error == nil else {self?.showError(error: error!); return }
+            self?.currencyData = data
         }
     }
     
@@ -91,9 +91,9 @@ extension ExchangeViewController: UITableViewDelegate {
         guard let base = currencyData?.currencyArray[indexPath.row].first?.key else { return }
         tableView.deselectRow(at: indexPath, animated: true)
         
-        ServerRequest.getData(base: base) { (data, error) in
-            guard error == nil else {self.showError(error: error!); return }
-            self.currencyData = data
+        ServerRequest.getData(base: base) { [weak self] (data, error) in
+            guard error == nil else {self?.showError(error: error!); return }
+            self?.currencyData = data
         }
     }
     
