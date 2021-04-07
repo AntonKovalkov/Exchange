@@ -14,9 +14,10 @@ class ExchangeViewController: UIViewController {
     private var currencyData: CurrencyData? {
         didSet {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
                 self.tableView.isHidden = false
                 self.loadIndicator(isLoading: false)
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                
             }
         }
     }
@@ -122,7 +123,7 @@ extension ExchangeViewController: UITableViewDelegate {
     
     private func scrollToFirstRow() {
         let indexPath = IndexPath(row: 0, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
     
 }
