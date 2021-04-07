@@ -11,7 +11,7 @@ class ExchangeViewController: UIViewController {
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    private var currencyData: Currency? {
+    private var currencyData: CurrencyData? {
         didSet {
             DispatchQueue.main.async {
                 self.scrollToFirstRow()
@@ -59,7 +59,7 @@ extension ExchangeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let date = currencyData?.date, let base = currencyData?.base else { return nil }
+        guard let date = currencyData?.date, let base = currencyData?.baseCurrency else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerID) as? CustomHeaderView else { return nil }
         
         header.currencyLabel.text = base

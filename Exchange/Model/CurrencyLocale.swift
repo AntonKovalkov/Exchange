@@ -10,28 +10,21 @@ import Foundation
 class CurrencyLocale {
     
     //Locale date
-    func getLocaleDate(from str: String) -> String {
+    static func getLocaleDate(from str: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        guard let date = dateFormatter.date(from: str) else { return "" }
-        
-        return localeDate(date: date)
-    }
-    
-    private func localeDate(date: Date)  -> String {
-        let dateFormatter = DateFormatter()
-        let locale = Locale.current
-        
-        dateFormatter.locale = locale
+        guard let date = dateFormatter.date(from: str) else { return str }
+        dateFormatter.locale = Locale.current
         dateFormatter.setLocalizedDateFormatFromTemplate("dd MM yyyy")
+        
         
         return dateFormatter.string(from: date)
     }
     
     
     //Locale value
-    func getLocaleValue(value: Float) -> String {
+    static func getLocaleValue(value: Float) -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         

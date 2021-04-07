@@ -9,7 +9,7 @@ import Foundation
 
 class ServerRequest {
     
-    static func getData(base: String = "EUR", complition: @escaping (Currency?, NetworkError?) -> Void) {
+    static func getData(base: String = "EUR", complition: @escaping (CurrencyData?, NetworkError?) -> Void) {
         let baseURL = "http://api.exchangeratesapi.io/v1/latest"
         let accessKey = "b25b47adb4f5207d8a4e0c921754854e"
         
@@ -28,9 +28,9 @@ class ServerRequest {
 
             do {
                 let decoder = JSONDecoder()
-                let object = try decoder.decode(Currency.self, from: data)
+                let object = try decoder.decode(CurrencyDecodeData.self, from: data)
 
-                complition(object, nil)
+                complition(CurrencyData(currencyDecodeData: object), nil)
             } catch {
                 complition(nil, .decodeError)
             }
