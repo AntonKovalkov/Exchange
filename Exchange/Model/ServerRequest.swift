@@ -23,6 +23,7 @@ class ServerRequest {
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 200
             if statusCode != 200 {
                 complition(nil, .requestError)
+                return
             }
             
 
@@ -33,6 +34,7 @@ class ServerRequest {
                 complition(CurrencyData(currencyDecodeData: object), nil)
             } catch {
                 complition(nil, .decodeError)
+                return
             }
         }
         

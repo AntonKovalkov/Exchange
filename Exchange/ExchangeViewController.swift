@@ -8,22 +8,25 @@
 import UIKit
 
 class ExchangeViewController: UIViewController {
-    @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private var currencyData: CurrencyData? {
         didSet {
             DispatchQueue.main.async {
-                self.scrollToFirstRow()
                 self.tableView.reloadData()
+                self.tableView.isHidden = false
+                self.loadIndicator(isLoading: false)
             }
         }
     }
+    
     
     private let headerID = "CustomHeaderView"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadIndicator(isLoading: true)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -35,25 +38,43 @@ class ExchangeViewController: UIViewController {
         }
     }
     
+    private func loadIndicator(isLoading: Bool) {
+        switch isLoading {
+        case true:
+            activityIndicator.startAnimating()
+            activityIndicator.isHidden = false
+        case false:
+            activityIndicator.stopAnimating()
+            activityIndicator.isHidden = true
+            scrollToFirstRow()
+        }
+    }
+    
     
     private func tableViewConfig() {
         let nib = UINib(nibName: headerID, bundle: nil)
         tableView.register(nib, forHeaderFooterViewReuseIdentifier: headerID)
         tableView.sectionHeaderHeight = 80
+        tableView.isHidden = true
     }
     
     private func showError(error: NetworkError) {
         DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "Error", message: error.rawValue, preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            alertController.addAction(action)
             self.tableView.isHidden = true
-            self.errorLabel.text = error.rawValue
+            self.loadIndicator(isLoading: false)
+            self.present(alertController, animated: true, completion: nil)
         }
-        
     }
+    
     
 }
 
 
 extension ExchangeViewController: UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -73,8 +94,8 @@ extension ExchangeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "exchangeCell") as? ExchangeTableViewCell else { return ExchangeTableViewCell()}
-        guard let currencyData = currencyData else { return ExchangeTableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "exchangeCell") as? ExchangeTableViewCell else { return UITableViewCell() }
+        guard let currencyData = currencyData else { return cell }
         
         cell.currencyLabel.text = currencyData.currencyArray[indexPath.row].first?.key
         cell.valueLabel.text = currencyData.currencyArray[indexPath.row].first?.value
@@ -90,6 +111,7 @@ extension ExchangeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let base = currencyData?.currencyArray[indexPath.row].first?.key else { return }
         tableView.deselectRow(at: indexPath, animated: true)
+        loadIndicator(isLoading: true)
         
         ServerRequest.getData(base: base) { [weak self] (data, error) in
             guard error == nil else {self?.showError(error: error!); return }
