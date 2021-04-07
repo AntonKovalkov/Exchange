@@ -39,6 +39,7 @@ class ExchangeViewController: UIViewController {
     }
     
     private func loadIndicator(isLoading: Bool) {
+        activityIndicator.center = view.center
         switch isLoading {
         case true:
             activityIndicator.startAnimating()
